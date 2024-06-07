@@ -1,11 +1,24 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigation } from '../../../contexts/UserContext';
 
 const Hamburger = () => {
-    const { toggleNavigation } = useNavigation();
-    const { isOpen } = useNavigation();
+    const { toggleNavigation, isOpen } = useNavigation();
+
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                toggleNavigation();
+            }
+        };
+    
+        window.addEventListener('keydown', handleKeyDown);
+    
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [toggleNavigation]);
 
     return (
         <div className="hamburger-menu z-20 p-2 mr-4 rounded-full hover:bg-black hover:bg-opacity-10" onClick={toggleNavigation}>

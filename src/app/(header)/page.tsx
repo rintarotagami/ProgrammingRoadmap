@@ -1,6 +1,6 @@
 "use client"
-import LeaderLine from 'leader-line';
 import React, { useEffect, useRef } from 'react';
+import LeaderLine from "leader-line-new";
 import Card from '../../components/elements/mindmap/card';
 
 export default function Home() {
@@ -15,16 +15,22 @@ export default function Home() {
     { cardId: '8', cardName: 'CSSアーキテクチャ' },
   ];
 
-  const connections = [
-    { start: '1', end: '2' }
+  const relations = [
+    { start: '1', end: '2' },
+    { start: '2', end: '3' },
+    { start: '3', end: '4' },
+    { start: '4', end: '5' },
+    { start: '5', end: '6' },
+    { start: '6', end: '7' },
+    { start: '7', end: '8' }
   ];
 
   const lines = useRef<LeaderLine[]>([]);
 
   useEffect(() => {
-    connections.forEach((connection, index) => {
-      const startElement = document.getElementById(`card-${connection.start}`);
-      const endElement = document.getElementById(`card-${connection.end}`);
+    relations.forEach((relation, index) => {
+      const startElement = document.getElementById(`card-${relation.start}`);
+      const endElement = document.getElementById(`card-${relation.end}`);
       if (startElement && endElement) {
         const line = new LeaderLine(startElement, endElement);
         lines.current.push(line);
