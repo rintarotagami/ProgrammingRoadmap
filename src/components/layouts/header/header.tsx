@@ -5,7 +5,7 @@ import Hamburger from '../../elements/button/hamburger'; // ハンバーガー�
 import ProfileToggleButton from '../../elements/button/profile'; // プロフィールボタンのインポート
 import ConfigButton from '../../elements/button/config'; // 設定ボタンのインポート
 
-const Header = () => {
+const Header = ({ webTitle }: { webTitle: string }) => {
     const [showNavigation, setShowNavigation] = useState(false);
 
     const toggleNavigation = () => setShowNavigation(!showNavigation);
@@ -15,7 +15,7 @@ const Header = () => {
             <div className="flex items-center justify-start">
                 <Hamburger /> {/* ハンバーガーボタンを追加 */}
                 <div className="logo">
-                    <span style={{ color: 'white', fontSize: 'large' }}>WithOutput</span>
+                    <span style={{ color: 'white', fontSize: 'large' }}>{webTitle}</span>
                 </div>
             </div>
             <div className="flex-grow flex items-center justify-center">

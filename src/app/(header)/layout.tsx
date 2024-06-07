@@ -9,8 +9,8 @@ import "../globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "WithOutput",
-  description: "デベロッパー支援SNS。アウトプットとインプットをシームレスに切り替えて成長を促します。",
+  title: "ProgrammerRoadmap",
+  description: "プログラミング学習者の為のロードマップ。ロードマップ作成ツール",
 };
 
 export default function RootLayout({
@@ -22,7 +22,7 @@ export default function RootLayout({
     <html lang="ja">
       <NavigationProvider>
         <body>
-          <Header />
+          <Header webTitle="ProgrammerRoadmap" />
           {children}
           <Footer />
         </body>

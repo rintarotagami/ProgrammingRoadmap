@@ -1,7 +1,3 @@
 {
-  "/(header)/page": "app/(header)/page.js",
-  "/(solveQuize)/example/page": "app/(solveQuize)/example/page.js",
-  "/(solveQuize)/solve/page": "app/(solveQuize)/solve/page.js",
-  "/(header)/favorite/page": "app/(header)/favorite/page.js",
-  "/(header)/create/page": "app/(header)/create/page.js"
+  "/(header)/page": "app/(header)/page.js"
 }
