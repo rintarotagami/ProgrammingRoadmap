@@ -3,43 +3,47 @@ erDiagram
 
 %% ER図のエンティティとその関連を表すコード
 User {
-    string id
+    int id(PK)
     string username
-    string email
+    string displayName
+    string bio
+    string profile_image
+    string date_of_birth
+    string email    
     string googleId
     string twitterId
 }
 
 Roadmap {
-    string id
+    int id(PK)
     string title
     string description
-    string userId
+    int userId
 }
 
 Card {
-    string id
+    int id(PK)
     string title
     string content
-    string roadmapId
+    int roadmapId
 }
 
 SubCard {
-    string id
+    int id(PK)
     string title
     string content
-    string cardId
+    int cardId
     boolean isCompleted
 }
 
 CardRelation {
-    string id
-    string startCardId
-    string endCardId
+    int id(PK)
+    int start(startCardId)
+    int endCardId
 }
 
 AuthenticationProvider {
-    string id
+    int id(PK)
     string name
 }
 
@@ -47,7 +51,7 @@ AuthenticationProvider {
 User ||--o{ Roadmap : "has"
 Roadmap ||--o{ Card : "contains"
 Card ||--o{ SubCard : "includes"
-Card ||--o{ CardRelation : "connects"
+Roadmap ||--o{ CardRelation : "connects"
 User ||--o{ AuthenticationProvider : "uses"
 
 %%  ユーザーは複数のロードマップを持つことができる
@@ -55,3 +59,4 @@ User ||--o{ AuthenticationProvider : "uses"
 %%  カードは複数のサブカードを持つことができる
 %%  カード間の接続情報を保存する
 %%  ユーザーは複数の認証プロバイダーを使用することができる
+
