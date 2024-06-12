@@ -7,52 +7,36 @@ User {
     string username
     string displayName
     string bio
-    string profile_image
+    %%biographyの略。profile
+    string profile_imageKey
     string date_of_birth
-    string email    
-    string googleId
-    string twitterId
+
+    string email
+    string password
+    string kanri_flg
 }
 
 Roadmap {
     int id(PK)
     string title
     string description
-    int userId
+    int userId(FK)
 }
 
 Card {
     int id(PK)
     string title
     string content
-    int roadmapId
-}
-
-SubCard {
-    int id(PK)
-    string title
-    string content
-    int cardId
+    int roadmapId(FK)
     boolean isCompleted
+    int parentId 
+    %%接続先のカードID
 }
 
-CardRelation {
-    int id(PK)
-    int start(startCardId)
-    int endCardId
-}
-
-AuthenticationProvider {
-    int id(PK)
-    string name
-}
 
 %% リレーションの定義
 User ||--o{ Roadmap : "has"
 Roadmap ||--o{ Card : "contains"
-Card ||--o{ SubCard : "includes"
-Roadmap ||--o{ CardRelation : "connects"
-User ||--o{ AuthenticationProvider : "uses"
 
 %%  ユーザーは複数のロードマップを持つことができる
 %%  ロードマップは複数のカードを持つことができる

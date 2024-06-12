@@ -1,14 +1,45 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int      @id @default(autoincrement())
+  username       String   @unique
+  displayName    String?
+  bio            String?
+  profile_imageKey String?
+  date_of_birth  DateTime?
+  email          String   @unique
+  password       String
+  kanri_flg      String?
+  Roadmaps       Roadmap[]
+}
+
+model Roadmap {
+  id          Int    @id @default(autoincrement())
+  title       String
+  description String?
+  userId      Int
+  User        User   @relation(fields: [userId], references: [id])
+  Cards       Card[]
+}
+
+model Card {
+  id           Int     @id @default(autoincrement())
+  title        String
+  content      String?
+  roadmapId    Int
+  isCompleted  Boolean @default(false)
+  parentId     Int?
+  Roadmap      Roadmap @relation(fields: [roadmapId], references: [id])
+  SubCards     Card[]  @relation("CardToCard")
+  ParentCard   Card?   @relation("CardToCard", fields: [parentId], references: [id])
 }
