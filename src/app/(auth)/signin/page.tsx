@@ -1,47 +1,37 @@
 "use client";
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useSession, signIn } from "next-auth/react";
-import { redirect, useSearchParams } from "next/navigation";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { validationLoginSchema } from "@/validationSchema";
+import { validationLoginSchema } from "@/validationSchema/validationRegistSchema";
+import FormRow from "@/components/elements/form/loginFormrow";
+import LoginFormButton from "@/components/elements/form/loginFormbutton";
+interface Error {
+  email: string[];
+  password: string[];
+}
 
-const Page = (props: any) => {
+const Page = () => {
   const { data: session, status } = useSession();
   const [resError, setResError] = useState<Error>();
+
   const {
     register,
     handleSubmit,
-    getValues,
     formState: { errors },
   } = useForm({
     mode: "onChange",
     resolver: zodResolver(validationLoginSchema),
   });
 
-  //セッション判定
+  // セッションがあればリダイレクト
   if (session) redirect("/");
 
-  // ログインのURLエラーを取得
-  const searchParams = useSearchParams();
-  const urlError = searchParams.get('error');
-  let urlErrorMsg = '';
-  if(urlError){
-    switch(urlError){
-      case 'OAuthAccountNotLinked':
-        urlErrorMsg = 'このメールアドレスは既に別のプロバイダーで登録されています。'
-        break;
-      default:
-        urlErrorMsg = urlError || ''
-    }
-  }
-
-  // ログイン処理の実行
+  // ログイン処理
   const handleLogin = async (data: any) => {
-    const email = data.email;
-    const password = data.password;
+    const { email, password } = data;
     const res = await fetch("/api/signIn", {
       body: JSON.stringify(data),
       headers: {
@@ -50,82 +40,36 @@ const Page = (props: any) => {
       method: "POST",
     });
     if (res.ok) {
-      signIn("credentials", { email: email, password: password });
+      signIn("credentials", { email, password });
     } else {
       const resError = await res.json();
       setResError(resError.errors);
     }
   };
+
   return (
     <>
-      <div className="flex flex-col w-full h-screen text-sm items-center justify-center">
-        <div className="flex flex-col items-center justify-center p-10 border-2 rounded-2xl">
-          <p className="text-2xl font-bold mb-5">ログイン画面</p>
-          <form
-            onSubmit={handleSubmit(handleLogin)}
-            className="flex flex-col items-center"
-          >
-            <div className="text-xs font-bold text-red-400 mb-4">
-              {resError as React.ReactNode}
+        <div className="flex flex-col items-center justify-center p-10 border-2 border-gray-700 rounded-2xl bg-white shadow-xl">
+          <h1 className="text-3xl font-bold mb-5 text-gray-800">ログイン</h1>
+          <form onSubmit={handleSubmit(handleLogin)} className="flex flex-col items-center gap-2">
+            <FormRow label="メールアドレス" type="text" id="email" register={register} errors={errors} />
+            <FormRow label="パスワード" type="password" id="password" register={register} errors={errors} />
+            <div className="text-xs font-bold text-red-500 mb-4">
+              {resError && Object.values(resError).map((error, index) => <p key={index}>{error}</p>)}
             </div>
-            <label htmlFor="email">
-              <p>メールアドレス</p>
-              <input
-                type="text"
-                id="email"
-                {...register("email")}
-                className=" border-2 w-[300px] h-[35px] px-2 mb-2"
-              />
-              <div className="text-xs font-bold text-red-400 mb-2">
-                {errors.email?.message as React.ReactNode}
-              </div>
-            </label>
-            <label htmlFor="password">
-              <p>パスワード</p>
-              <input
-                type="password"
-                id="password"
-                {...register("password")}
-                className=" border-2 w-[300px] h-[35px] px-2 mb-2"
-              />
-              <div className="text-xs font-bold text-red-400 mb-2">
-                {errors.password?.message as React.ReactNode}
-              </div>
-            </label>
-            <button
-              type="submit"
-              className="text-white bg-gray-700 w-[300px] h-[35px] mt-2"
-            >
+            <button type="submit" className="text-white bg-gray-800 w-full h-10 mt-4 hover:bg-gray-700">
               ログイン
             </button>
           </form>
-          <hr className="my-4 border-gray-300 w-[300px]" />
-          <div className="flex flex-col items-center">
-            <button
-              onClick={() => {
-                signIn("github");
-              }}
-              className="bg-white text-black border-2 w-[300px] h-[35px] mb-2"
-            >
-              Githubでログイン
-            </button>
-            <button
-              onClick={() => {
-                signIn("google");
-              }}
-              className="bg-white text-black border-2 w-[300px] h-[35px] mb-2"
-            >
-              Googleでログイン
-            </button>
-            <div className="text-xs font-bold text-red-400 mb-2">
-              {urlErrorMsg}
-            </div>
-            <Link href="/signup" className="mt-2">
+          <hr className="my-4 border-gray-600 w-full" />
+          <div className="flex flex-col items-center w-full">
+            <LoginFormButton provider="github">Githubでログイン</LoginFormButton>
+            <LoginFormButton provider="google">Googleでログイン</LoginFormButton>
+            <Link href="/signup" className="mt-2 text-gray-300 hover:text-white">
               新規登録はこちら
             </Link>
           </div>
         </div>
-      </div>
     </>
   );
 };

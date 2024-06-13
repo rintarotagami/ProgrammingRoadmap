@@ -1,7 +1,10 @@
-import React from 'react';
+import { NavigationProvider } from '@/contexts/UserContext';
+import { NextAuthProvider } from "@/_lib/providers/NextAuthProvider";
 import type { Metadata } from "next";
 import "./globals.css";
 
+import Header from "@/components/layouts/header/header";
+import Footer from "@/components/layouts/footer/footer";
 
 export const metadata: Metadata = {
     title: "ProgrammerRoadmap",
@@ -14,8 +17,16 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="ja">
-            {children}
-        </html>
+        <NextAuthProvider>
+            <NavigationProvider>
+                <html lang="ja">
+                    <body>
+                        <Header webTitle="ProgrammerRoadmap" />
+                        {children}
+                        <Footer />
+                    </body>
+                </html>
+            </NavigationProvider>
+        </NextAuthProvider>
     );
 }

@@ -1,18 +1,16 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import Link from 'next/link';
 
 const SigninButton = () => {
-    const navigate = useNavigate();
-
-    const handleSignIn = () => {
-        navigate('/signin');
-    };
-
     return (
-        <button onClick={handleSignIn} className="p-2 w-30 h-30 rounded-full bg-blue-500 hover:bg-blue-700 text-white">
-            ログイン
-        </button>
+        <Link href="/signin">
+            <div className="p-2 w-30 h-30 rounded-full bg-gray-400 hover:bg-gray-700 text-white">
+                ログイン
+            </div>
+        </Link>
     );
 };
 
 export default SigninButton;
+
+

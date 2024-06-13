@@ -4,7 +4,7 @@ import React, { startTransition, useEffect } from "react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { validationRegistUserInfo } from "@/validationSchema";
+import { validationRegistUserInfo } from "@/validationSchema/validationRegistSchema";
 import { useSession } from "next-auth/react";
 import { revalidateAndRedirectPath } from "@/lib/server_actions";
 
